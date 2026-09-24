@@ -1,24 +1,52 @@
-# README
+# RottenPotatoes
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Catálogo de filmes com CRUD, validações, ordenação e testes — desenvolvido com Ruby on Rails.
 
-Things you may want to cover:
+## Pré-requisitos
 
-* Ruby version
+- Ruby 3.3.6 (gerenciado via rbenv)
+- Rails 8.1.3.1
+- SQLite3
 
-* System dependencies
+## Instalando as dependências
 
-* Configuration
+```bash
+bundle install
+```
 
-* Database creation
+## Preparando o banco de dados
 
-* Database initialization
+Cria as tabelas:
 
-* How to run the test suite
+```bash
+bin/rails db:migrate
+```
 
-* Services (job queues, cache servers, search engines, etc.)
+Popula com filmes iniciais (idempotente — pode ser rodado várias vezes sem duplicar):
 
-* Deployment instructions
+```bash
+bin/rails db:seed
+```
 
-* ...
+## Executando os testes
+
+```bash
+bin/rails test
+```
+
+Resultado esperado: todos os testes passando, sem falhas.
+
+## Iniciando o servidor
+
+```bash
+bin/rails server
+```
+
+Acesse em: [http://localhost:3000/movies](http://localhost:3000/movies)
+
+## Funcionalidades
+
+- Listar, criar, editar e excluir filmes
+- Validações: título obrigatório, classificação dentro de G / PG / PG-13 / R / NC-17, data de lançamento obrigatória
+- Ordenação por título ou data de lançamento via parâmetro de URL (`?sort_by=title` ou `?sort_by=release_date`)
+- Destaque visual da coluna ordenada
