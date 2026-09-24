@@ -1,4 +1,4 @@
-##🍅 Como rodar o RottenPotatoes no seu computador
+🍅 Como rodar o RottenPotatoes no seu computador
 1. Pré-requisitos
 Windows: use o WSL (Ubuntu). Abra o PowerShell, digite wsl ~ e rode tudo lá dentro.
 Linux ou Mac: use o terminal normal.
