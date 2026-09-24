@@ -1,13 +1,27 @@
 %p{style: "color: green"}= notice
 
-- content_for :title, "Movies"
-
 %h1 Movies
 
-%div{id: "movies"}
-  - @movies.each do |movie|
-    = render movie
-    %p
-      = link_to "Show this movie", movie
+%table{id: "movies"}
+  %thead
+    %tr
+      %th{class: ("hilite" if @sort_by == "title")}
+        = link_to "Título", movies_path(sort_by: "title"), id: :title_header
+      %th Classificação
+      %th{class: ("hilite" if @sort_by == "release_date")}
+        = link_to "Lançamento", movies_path(sort_by: "release_date"), id: :release_date_header
+      %th Sinopse
+      %th
+  %tbody
+    - @movies.each do |movie|
+      %tr
+        %td= link_to movie.title, movie
+        %td= movie.rating
+        %td= link_to movie.release_date, movie
+        %td= movie.description
+        %td
+          = link_to "Editar", edit_movie_path(movie)
+          = " | "
+          = link_to "Excluir", movie, data: { turbo_method: :delete, turbo_confirm: "Tem certeza?" }
 
-= link_to "New movie", new_movie_path
+= link_to "Novo filme", new_movie_path

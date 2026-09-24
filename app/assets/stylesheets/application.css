@@ -69,6 +69,11 @@ table#movies th, table#movies td {
   text-align: left;
 }
 
+table#movies th.hilite {
+  background-color: goldenrod;
+  color: white;
+}
+
 #notice, #warning {
   background: rosybrown;
   margin: 1em 0;
