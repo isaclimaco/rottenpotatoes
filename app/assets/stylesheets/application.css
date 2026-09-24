@@ -74,6 +74,10 @@ table#movies th.hilite {
   color: white;
 }
 
+table#movies th.hilite a {
+  color: white;
+}
+
 #notice, #warning {
   background: rosybrown;
   margin: 1em 0;

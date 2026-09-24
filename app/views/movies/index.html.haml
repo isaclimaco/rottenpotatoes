@@ -11,13 +11,13 @@
       %th{class: ("hilite" if @sort_by == "release_date")}
         = link_to "Lançamento", movies_path(sort_by: "release_date"), id: :release_date_header
       %th Sinopse
-      %th
+      %th Ações
   %tbody
     - @movies.each do |movie|
       %tr
         %td= link_to movie.title, movie
         %td= movie.rating
-        %td= link_to movie.release_date, movie
+        %td= link_to movie.release_date.strftime("%d/%m/%Y"), movie
         %td= movie.description
         %td
           = link_to "Editar", edit_movie_path(movie)
