@@ -83,6 +83,7 @@ Clicar em Título e em Lançamento para ordenar a tabela. A coluna escolhida fic
 Criar, ver, editar e excluir um filme.
 Tentar criar um filme sem título: tem que aparecer uma mensagem de erro.
 Acessar /movies?sort=qualquer: a página tem que abrir normalmente, sem erro.
+
 🛠️ Se der problema
 
 rails-8.1.3.1 requires Ruby version >= 3.2.0
