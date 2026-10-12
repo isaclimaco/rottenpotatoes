@@ -20,3 +20,8 @@ Feature: User can view the movie list sorted by title
     Then I should be on the RottenPotatoes home page
     When I follow "Movie Title"
     Then I should see "Apocalypse Now" before "Zorro"
+
+  Scenario: View movie list sorted by title (declarative)
+    Given I have added the movies "Zorro" rated "PG" and "Apocalypse Now" rated "R"
+    When I sort the movies by title
+    Then I should see "Apocalypse Now" before "Zorro"
