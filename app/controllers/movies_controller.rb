@@ -14,7 +14,7 @@ class MoviesController < ApplicationController
 
   # GET /movies/new
   def new
-    @movie = Movie.new
+    @movie = Movie.new(release_date: Date.current)
   end
 
   # GET /movies/1/edit
@@ -27,7 +27,7 @@ class MoviesController < ApplicationController
 
     respond_to do |format|
       if @movie.save
-        format.html { redirect_to @movie, notice: "Movie was successfully created." }
+        format.html { redirect_to movies_path, notice: "..." }
         format.json { render :show, status: :created, location: @movie }
       else
         format.html { render :new, status: :unprocessable_content }
@@ -58,7 +58,11 @@ class MoviesController < ApplicationController
       format.json { head :no_content }
     end
   end
-
+  def search_tmdb
+    @search_terms = params[:search_terms]
+    flash[:notice] = "'#{@search_terms}' was not found in TMDb."
+    redirect_to movies_path
+  end
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_movie

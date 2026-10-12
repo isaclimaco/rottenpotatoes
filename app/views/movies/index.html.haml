@@ -6,7 +6,7 @@
   %thead
     %tr
       %th{class: ("hilite" if @sort_by == "title")}
-        = link_to "Título", movies_path(sort_by: "title"), id: :title_header
+        = link_to "Movie Title", movies_path(sort_by: "title"), id: "title_header"
       %th Classificação
       %th{class: ("hilite" if @sort_by == "release_date")}
         = link_to "Lançamento", movies_path(sort_by: "release_date"), id: :release_date_header
@@ -24,4 +24,9 @@
           = " | "
           = link_to "Excluir", movie, data: { turbo_method: :delete, turbo_confirm: "Tem certeza?" }
 
-= link_to "Novo filme", new_movie_path
+= link_to "Add new movie", new_movie_path
+%h3 Search TMDb for a movie
+= form_with url: search_tmdb_movies_path, method: :post do |f|
+  = f.label :search_terms, "Search Terms"
+  = f.text_field :search_terms
+  = f.submit "Search TMDb"
