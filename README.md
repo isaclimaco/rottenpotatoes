@@ -1,6 +1,10 @@
+
 # 🍅 RottenPotatoes
 
-Catálogo de filmes com CRUD, validações, ordenação e testes, desenvolvido com Ruby on Rails como parte do Homework 2 da disciplina de Engenharia de Software (UnB), seguindo o Capítulo 4 do livro *Engineering Software as a Service*.
+Catálogo de filmes com CRUD, validações, ordenação e testes, desenvolvido com Ruby on Rails na disciplina de Engenharia de Software (UnB), seguindo o livro *Engineering Software as a Service* (ESaaS):
+
+- **Homework 2 (Capítulo 4):** aplicação Rails com CRUD, validações e ordenação de colunas.
+- **Tarefa de BDD:** cenários Cucumber + Capybara que descrevem e testam o comportamento da aplicação do ponto de vista do usuário.
 
 ## Funcionalidades
 
@@ -8,22 +12,30 @@ Catálogo de filmes com CRUD, validações, ordenação e testes, desenvolvido c
 - Validações: título obrigatório, classificação dentro de G / PG / PG-13 / R / NC-17 e data de lançamento obrigatória
 - Ordenação por título ou por data de lançamento, clicando no cabeçalho da tabela (`?sort_by=title` ou `?sort_by=release_date`)
 - Destaque visual da coluna que está ordenando a tabela
+- Formulário de novo filme já preenchido com a data de hoje
+- Busca no TMDb (The Movie Database), apenas o *sad path*: ao buscar um filme, a aplicação avisa que ele não foi encontrado (`'Título' was not found in TMDb.`)
 
 ## Como foi implementado
 
 - **Model (`app/models/movie.rb`):** o `Movie` herda de `ApplicationRecord` e concentra as regras de negócio (validações e a lista `RATINGS`).
-- **Controller (`app/controllers/movies_controller.rb`):** a action `index` lê o parâmetro de ordenação em `params`, aceita apenas os campos permitidos (`title` e `release_date`) e usa o método `order` do ActiveRecord para ordenar a consulta.
-- **Views (`app/views/movies/`):** escritas em Haml. Os cabeçalhos Título e Data de Lançamento são links criados com `link_to`, com os ids `title_header` e `release_date_header`.
+- **Rotas (`config/routes.rb`):** `resources :movies` cria as rotas REST do CRUD; uma rota de coleção `POST /movies/search_tmdb` atende a busca no TMDb.
+- **Controller (`app/controllers/movies_controller.rb`):**
+   - `index` lê o parâmetro de ordenação em `params`, aceita apenas os campos permitidos (`title` e `release_date`) e usa o método `order` do ActiveRecord.
+   - `new` cria o filme já com a data de hoje; `create` volta para a lista de filmes após salvar.
+   - `search_tmdb` lê o termo buscado em `params`, coloca a mensagem de "não encontrado" no `flash` e redireciona para a lista.
+- **Views (`app/views/movies/`):** escritas em Haml. Os cabeçalhos de título (**Movie Title**) e de data de lançamento são links criados com `link_to`, com os ids `title_header` e `release_date_header`. A página inicial também tem o formulário **Search TMDb for a movie**.
 - **CSS (`app/assets/stylesheets/application.css`):** estiliza o layout e aplica a classe de destaque na coluna ordenada.
-- **Testes (`test/`):** testes em Minitest para as validações do model.
+- **Testes de unidade (`test/`):** Minitest para o model e o controller.
+- **Testes BDD (`features/`):** Cucumber + Capybara (detalhes na seção *Testes BDD*).
 
 ## Tecnologias
 
 - Ruby 3.3.6 (gerenciado com rbenv)
-- Rails 8.1.3.1
+- Rails 8.1.4
 - SQLite3
 - Haml
-- Minitest
+- Minitest (testes de unidade)
+- Cucumber, Capybara e RSpec Expectations (testes BDD)
 
 ## Como instalar e executar
 
@@ -102,6 +114,14 @@ bin/rails test
 
 Resultado esperado: `0 failures, 0 errors`.
 
+Para rodar também os cenários BDD:
+
+```bash
+bundle exec cucumber
+```
+
+Resultado esperado: `3 scenarios (3 passed)`.
+
 ### 7. Iniciar o servidor
 
 ```bash
@@ -112,14 +132,35 @@ Acesse [http://localhost:3000/movies](http://localhost:3000/movies). Para deslig
 
 ## O que testar
 
-- Clicar em **Título** e em **Data de Lançamento** para ordenar a tabela; a coluna escolhida fica destacada.
+- Clicar em **Movie Title** e no cabeçalho de data de lançamento para ordenar a tabela; a coluna escolhida fica destacada.
+- Digitar qualquer título em **Search Terms** e clicar em **Search TMDb**: aparece a mensagem de que o filme não foi encontrado.
 - Criar, visualizar, editar e excluir um filme.
 - Tentar criar um filme sem título e conferir a mensagem de erro.
 - Acessar `/movies?sort_by=qualquer`: a página deve abrir normalmente, sem erro.
 
+## Testes BDD
+
+Os cenários ficam em `features/` e são escritos em Gherkin (*Given / When / Then*). O Cucumber lê cada frase, encontra o *step definition* correspondente e o Capybara executa a ação como um usuário faria.
+
+| Arquivo | Cenário | Tipo |
+|---|---|---|
+| `features/add_movie_tmdb.feature` | *Try to add nonexistent movie*: busca no TMDb um filme que não existe e confere a mensagem de aviso | Sad path |
+| `features/sort_movie_list.feature` | *View movie list after adding 2 movies*: adiciona dois filmes pelo formulário, ordena por título e confere a ordem | Imperativo |
+| `features/sort_movie_list.feature` | *View movie list sorted by title*: a mesma história em 3 passos, descrevendo o **o quê** e não o **como** | Declarativo |
+
+Arquivos de apoio:
+
+- `features/step_definitions/web_steps.rb`: steps genéricos de navegação (visitar página, clicar, preencher, selecionar, conferir texto e ordem).
+- `features/step_definitions/movie_steps.rb`: steps do cenário declarativo (criar filmes direto no banco e ordenar por título).
+- `features/support/paths.rb`: traduz nomes de páginas (como *the RottenPotatoes home page*) em rotas do Rails.
+
+```bash
+bundle exec cucumber
+```
+
 ## Problemas comuns
 
-**`rails-8.1.3.1 requires Ruby version >= 3.2.0`**
+**`rails-8.1.x requires Ruby version >= 3.2.0`**
 O terminal está usando um Ruby antigo. Rode `exec zsh` (ou `exec bash`) e confira `ruby --version`. Se não aparecer 3.3.6, refaça o passo 3.
 
 **`Network is unreachable` no `bundle install` (comum no WSL)**
@@ -163,3 +204,4 @@ E acesse `localhost:3001/movies`.
 ## Autora
 
 Isabela de Souza Clímaco — matrícula 190088931
+
