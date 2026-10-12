@@ -58,7 +58,11 @@ class MoviesController < ApplicationController
       format.json { head :no_content }
     end
   end
-
+  def search_tmdb
+    @search_terms = params[:search_terms]
+    flash[:notice] = "'#{@search_terms}' was not found in TMDb."
+    redirect_to movies_path
+  end
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_movie
