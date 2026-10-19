@@ -2,14 +2,22 @@
 
 %h1 Movies
 
+= form_with url: movies_path, method: :get, id: "ratings_form" do |f|
+  - @all_ratings.each do |rating|
+    = check_box_tag "ratings[#{rating}]", "1", @ratings_to_show.include?(rating), id: "ratings_#{rating}"
+    = label_tag "ratings_#{rating}", rating
+  - if @sort_by
+    = hidden_field_tag :sort_by, @sort_by
+  = f.submit "Refresh", id: "ratings_submit"
+
 %table{id: "movies"}
   %thead
     %tr
       %th{class: ("hilite" if @sort_by == "title")}
-        = link_to "Movie Title", movies_path(sort_by: "title"), id: "title_header"
+        = link_to "Movie Title", movies_path(sort_by: "title", ratings: params[:ratings]), id: "title_header"
       %th Classificação
       %th{class: ("hilite" if @sort_by == "release_date")}
-        = link_to "Lançamento", movies_path(sort_by: "release_date"), id: :release_date_header
+        = link_to "Release Date", movies_path(sort_by: "release_date", ratings: params[:ratings]), id: :release_date_header
       %th Sinopse
       %th Ações
   %tbody
