@@ -1,3 +1,10 @@
+Given('the following movies exist:') do |table|
+  table.hashes.each do |row|
+    Movie.create!(title: row['title'], rating: row['rating'],
+                  release_date: Date.parse(row['release_date']))
+  end
+end
+
 Given('I have added the movies {string} rated {string} and {string} rated {string}') do |title1, rating1, title2, rating2|
   Movie.create!(title: title1, rating: rating1, release_date: Date.today)
   Movie.create!(title: title2, rating: rating2, release_date: Date.today)
