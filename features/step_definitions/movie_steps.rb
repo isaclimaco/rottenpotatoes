@@ -15,6 +15,23 @@ When('I sort the movies by title') do
   click_link('Movie Title')
 end
 
+Given /^I (check|uncheck) the following ratings: (.+)$/ do |action, list|
+  list.split(',').map(&:strip).each do |rating|
+    step "I #{action} \"ratings_#{rating}\""
+  end
+end
+
+Then('I should see all of the movies') do
+  rows = page.all('table#movies tbody tr').count
+  rows.should == Movie.count
+end
+
+Given('I check all ratings') do
+  Movie.all_ratings.each do |rating|
+    step "I check \"ratings_#{rating}\""
+  end
+end
+
 Then('I should see {string} before {string}') do |first, second|
   first_pos = page.body.index(first)
   second_pos = page.body.index(second)
