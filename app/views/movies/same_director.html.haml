@@ -1,0 +1,19 @@
+%h2 Movies directed by #{@movie.director}
+
+- if @movies.any?
+  %table#movies
+    %thead
+      %tr
+        %th Movie Title
+        %th Rating
+        %th Release Date
+    %tbody
+      - @movies.each do |movie|
+        %tr
+          %td= link_to movie.title, movie_path(movie)
+          %td= movie.rating
+          %td= movie.release_date
+- else
+  %p No other movies found with this director.
+
+= link_to "Back to all movies", movies_path

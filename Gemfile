@@ -53,6 +53,8 @@ group :development, :test do
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
+
+  gem "rspec-rails"
 end
 
 group :development do
@@ -67,4 +69,6 @@ group :test do
   gem "cucumber-rails", require: false
   gem "database_cleaner-active_record"
   gem "rspec-expectations"
+  gem "rails-controller-testing"
+  gem "simplecov", require: false
 end
