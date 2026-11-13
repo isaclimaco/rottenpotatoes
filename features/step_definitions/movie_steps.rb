@@ -1,7 +1,8 @@
 Given('the following movies exist:') do |table|
   table.hashes.each do |row|
     Movie.create!(title: row['title'], rating: row['rating'],
-                  release_date: Date.parse(row['release_date']))
+                  release_date: Date.parse(row['release_date']),
+                  director: row['director'].presence)
   end
 end
 
@@ -38,4 +39,8 @@ Then('I should see {string} before {string}') do |first, second|
   expect(first_pos).not_to be_nil, "\"#{first}\" não aparece na página"
   expect(second_pos).not_to be_nil, "\"#{second}\" não aparece na página"
   expect(first_pos).to be < second_pos
+end
+
+Then('the director of {string} should be {string}') do |title, director|
+  expect(Movie.find_by!(title: title).director).to eq(director)
 end

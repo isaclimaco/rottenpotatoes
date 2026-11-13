@@ -24,4 +24,8 @@
     = form.date_field :release_date
 
   %div
-    = form.submit "Save Changes"
+    = form.label :director, "Director", style: "display: block"
+    = form.text_field :director
+
+  %div
+    = form.submit(movie.persisted? ? "Update Movie Info" : "Save Changes")
