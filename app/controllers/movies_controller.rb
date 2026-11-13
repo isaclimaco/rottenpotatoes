@@ -66,6 +66,17 @@ class MoviesController < ApplicationController
     flash[:notice] = "'#{@search_terms}' was not found in TMDb."
     redirect_to movies_path
   end
+
+  def same_director
+    @movie = Movie.find(params[:id])
+    if @movie.director.blank?
+      flash[:notice] = "'#{@movie.title}' has no director info"
+      redirect_to movies_path
+    else
+      @movies = Movie.with_same_director(@movie)
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_movie

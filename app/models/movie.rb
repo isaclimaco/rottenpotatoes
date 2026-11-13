@@ -8,4 +8,9 @@ class Movie < ApplicationRecord
   def self.all_ratings
     RATINGS
   end
+
+  def self.with_same_director(movie)
+    return none if movie.director.blank?
+    where(director: movie.director).where.not(id: movie.id)
+  end
 end
